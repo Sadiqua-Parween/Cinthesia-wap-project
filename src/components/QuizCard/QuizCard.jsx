@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './QuizCard.css'
 
-function QuizCard() {
+function QuizCard({ onDismiss }) {
   const navigate = useNavigate()
   const [selectedMood, setSelectedMood] = useState(null)
+  const [isDismissing, setIsDismissing] = useState(false)
 
   const moods = [
     { emoji: '😊', label: 'Great' },
@@ -13,8 +14,27 @@ function QuizCard() {
     { emoji: '😫', label: 'Stressed' },
   ]
 
+  // Handle dismiss — animate out, save to localStorage, notify parent
+  function handleDismiss() {
+    setIsDismissing(true)
+    localStorage.setItem('hideSkinQuiz', 'true')
+    setTimeout(() => {
+      if (onDismiss) onDismiss()
+    }, 400)
+  }
+
   return (
-    <div className="quiz-card">
+    <div className={`quiz-card ${isDismissing ? 'quiz-card--dismissing' : ''}`}>
+      {/* Close button */}
+      <button
+        className="quiz-card__close"
+        onClick={handleDismiss}
+        aria-label="Dismiss quiz"
+        title="Maybe later"
+      >
+        ✕
+      </button>
+
       <div className="quiz-card__header">
         <span className="quiz-card__greeting">Good evening</span>
         <span className="quiz-card__wave">👋</span>

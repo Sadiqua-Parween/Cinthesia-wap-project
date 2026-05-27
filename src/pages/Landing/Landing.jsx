@@ -4,7 +4,10 @@ import QuizCard from '../../components/QuizCard/QuizCard'
 import './Landing.css'
 
 function Landing() {
-  const [quizDismissed, setQuizDismissed] = useState(false)
+  // Check localStorage — if user previously dismissed the quiz, keep it hidden
+  const [quizDismissed, setQuizDismissed] = useState(
+    () => localStorage.getItem('hideSkinQuiz') === 'true'
+  )
   const categories = [
     { name: 'Cleansers', emoji: '🧴' },
     { name: 'Serums', emoji: '💧' },
