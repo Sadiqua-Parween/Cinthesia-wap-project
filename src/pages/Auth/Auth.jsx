@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { signUpWithEmailAndPassword, signInUser } from '../../firebase/db'
 import './Auth.css'
 
 function Auth() {
@@ -17,11 +18,8 @@ function Auth() {
   const [messageType, setMessageType] = useState('') // 'success' or 'error'
   const [loading, setLoading] = useState(false)
 
-  // Backend URL
-  const API_URL = 'http://localhost:3001/api'
-
   // ========================
-  // SIGN UP — fetch to /api/signup
+  // SIGN UP — Firebase Email/Password Auth
   // ========================
   async function handleSignUp(e) {
     e.preventDefault()
@@ -29,18 +27,9 @@ function Auth() {
     setMessage('')
 
     try {
-      // Send POST request to backend with name, email, password
-      const response = await fetch(`${API_URL}/signup`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
-      })
-
-      const data = await response.json()
-
-      if (data.success) {
-        // Success! Show message and switch to sign-in mode
-        setMessage(data.message)
+      const result = await signUpWithEmailAndPassword(email, password, name)
+      if (result.success) {
+        setMessage(result.message || 'Account created successfully! You can now sign in.')
         setMessageType('success')
         // Clear form and switch to sign-in after 1.5s
         setTimeout(() => {
@@ -49,13 +38,10 @@ function Auth() {
           setPassword('')
           setMessage('')
         }, 1500)
-      } else {
-        // Error (e.g., user already exists)
-        setMessage(data.message)
-        setMessageType('error')
       }
     } catch (error) {
-      setMessage('Server not reachable. Make sure to run: node server/server.js')
+      console.error("Signup error:", error)
+      setMessage(error.message || 'Signup failed. Please try again.')
       setMessageType('error')
     }
 
@@ -63,7 +49,7 @@ function Auth() {
   }
 
   // ========================
-  // SIGN IN — fetch to /api/signin
+  // SIGN IN — Firebase Email/Password Auth
   // ========================
   async function handleSignIn(e) {
     e.preventDefault()
@@ -71,30 +57,18 @@ function Auth() {
     setMessage('')
 
     try {
-      // Send POST request to backend with email, password
-      const response = await fetch(`${API_URL}/signin`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      })
-
-      const data = await response.json()
-
-      if (data.success) {
-        // Login successful!
-        setMessage(data.message)
+      const result = await signInUser(email, password)
+      if (result.success) {
+        setMessage(result.message || `Login successful! Welcome back, ${result.userData?.name || 'Glow-getter'}.`)
         setMessageType('success')
         // Navigate to home after 1.5s
         setTimeout(() => {
           navigate('/')
         }, 1500)
-      } else {
-        // Invalid credentials
-        setMessage(data.message)
-        setMessageType('error')
       }
     } catch (error) {
-      setMessage('Server not reachable. Make sure to run: node server/server.js')
+      console.error("Signin error:", error)
+      setMessage(error.message || 'Invalid email or password.')
       setMessageType('error')
     }
 
@@ -165,6 +139,7 @@ function Auth() {
                   className="auth__input"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  autoComplete="name"
                   required
                 />
               </div>
@@ -180,6 +155,7 @@ function Auth() {
                 className="auth__input"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
                 required
               />
             </div>
@@ -194,6 +170,7 @@ function Auth() {
                 className="auth__input"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                autoComplete={isSignUp ? 'new-password' : 'current-password'}
                 required
                 minLength={6}
               />

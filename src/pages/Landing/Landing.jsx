@@ -94,7 +94,7 @@ function Landing() {
               Not trends. Just what <u>actually works</u> for you.
             </p>
             <div className="hero__ctas">
-              <Link to="/routine" className="btn btn-primary hero__cta-primary">
+              <Link to="/quiz" className="btn btn-primary hero__cta-primary">
                 Start Your 60-sec Skin Analysis <span>→</span>
               </Link>
               <button className="btn btn-secondary hero__cta-secondary">
@@ -183,7 +183,7 @@ function Landing() {
                 )}
                 <p className="feature-card__desc">{feature.desc}</p>
                 {feature.link && (
-                  <Link to="/routine" className="link-arrow feature-card__link">{feature.link}</Link>
+                  <Link to="/quiz" className="link-arrow feature-card__link">{feature.link}</Link>
                 )}
               </div>
             ))}

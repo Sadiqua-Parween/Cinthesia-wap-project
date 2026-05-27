@@ -1,19 +1,45 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { getUserData, watchAuthState } from '../../firebase/db'
 import ProductCard from '../../components/ProductCard/ProductCard'
 import SkinInsights from '../../components/SkinInsights/SkinInsights'
+import { getStoredQuizResult } from '../../utils/quiz'
 import './Recommendation.css'
 
 function Recommendation() {
   const [activeTab, setActiveTab] = useState('AM')
+  const [userName, setUserName] = useState('Ananya')
+  const quizResult = getStoredQuizResult()
 
-  const routineSteps = [
+  useEffect(() => {
+    const unsubscribe = watchAuthState(async (user) => {
+      if (user) {
+        try {
+          const data = await getUserData(user.uid || user.email)
+          if (data && data.name) {
+            setUserName(data.name)
+          } else {
+            setUserName(user.email.split('@')[0])
+          }
+        } catch (error) {
+          console.error("Error fetching user data in Recommendation:", error);
+          setUserName(user.email.split('@')[0])
+        }
+      } else {
+        setUserName('Ananya')
+      }
+    })
+    return () => unsubscribe()
+  }, [])
+
+  const defaultRoutineSteps = [
     { num: 1, label: 'CLEANSE', icon: '🫧' },
     { num: 2, label: 'TREAT', icon: '✦' },
     { num: 3, label: 'HYDRATE', icon: '💧' },
     { num: 4, label: 'PROTECT', icon: '💜' },
   ]
 
-  const products = [
+  const defaultProducts = [
     {
       image: '/images/hero-products.png',
       name: 'CeraVe Hydrating Cleanser',
@@ -45,7 +71,10 @@ function Recommendation() {
     },
   ]
 
-  const skinTags = ['Combination Skin', 'Acne-prone', 'Dehydrated', 'Sensitive']
+  const routineSteps = quizResult?.routineSteps?.[activeTab] || defaultRoutineSteps
+  const products = quizResult?.products?.[activeTab] || defaultProducts
+  const skinTags = quizResult?.skinTags || ['Combination Skin', 'Acne-prone', 'Dehydrated', 'Sensitive']
+  const routineSummary = quizResult?.summary || 'Based on your answers, we handpicked these products and insights just for you.'
 
   return (
     <div className="recommendation">
@@ -53,13 +82,12 @@ function Recommendation() {
       <section className="reco-hero">
         <div className="reco-hero__inner container">
           <div className="reco-hero__content">
-            <p className="reco-hero__greeting">Good evening, Ananya 👋</p>
+            <p className="reco-hero__greeting">Good evening, {userName} 👋</p>
             <h1 className="reco-hero__heading">
               Your <em>personalized</em><br />routine is here.
             </h1>
             <p className="reco-hero__subtext">
-              Based on your answers, we handpicked<br />
-              these products and insights just for you.
+              {routineSummary}
             </p>
             <div className="reco-hero__tags">
               {skinTags.map((tag, i) => (
@@ -73,7 +101,7 @@ function Recommendation() {
           </div>
 
           <div className="reco-hero__insights">
-            <SkinInsights />
+            <SkinInsights insights={quizResult?.insights} />
           </div>
         </div>
       </section>
@@ -181,7 +209,7 @@ function Recommendation() {
               <p className="insight-card__desc">
                 Retake the quiz after 30 days to update your routine.
               </p>
-              <button className="btn btn-outline insight-card__btn">Retake Quiz <span>→</span></button>
+              <Link to="/quiz" className="btn btn-outline insight-card__btn">Retake Quiz <span>→</span></Link>
               <img src="/images/glow-serum.png" alt="Glow serum" className="insight-card__image" />
             </div>
 

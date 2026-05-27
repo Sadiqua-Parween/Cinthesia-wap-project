@@ -1,6 +1,6 @@
 import './ProductCard.css'
 
-function ProductCard({ image, name, price, originalPrice, benefit, tags = [], step }) {
+function ProductCard({ image, name, price, originalPrice, benefit, tags = [] }) {
   return (
     <div className="product-card card">
       <div className="product-card__image-wrap">

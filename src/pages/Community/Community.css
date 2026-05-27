@@ -3,9 +3,28 @@
 .comm-hero__heading { font-size: var(--text-5xl); font-weight: var(--font-bold); color: var(--color-text); margin-bottom: var(--space-4); line-height: 1.15; }
 .comm-hero__heading em { font-style: italic; color: var(--color-primary); }
 .comm-hero__subtext { font-size: var(--text-base); color: var(--color-text-secondary); margin-bottom: var(--space-6); }
-.comm-hero__input-wrap { display: flex; gap: var(--space-3); max-width: 480px; }
+.comm-hero__form { width: 100%; max-width: 720px; }
+.comm-hero__input-wrap { display: flex; gap: var(--space-3); width: 100%; }
 .comm-hero__input { flex: 1; padding: 12px 20px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-full); font-size: var(--text-sm); }
 .comm-hero__input:focus { border-color: var(--color-primary-light); }
+.comm-hero__select {
+  min-width: 150px;
+  padding: 12px 16px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  outline: none;
+}
+.comm-hero__select:focus { border-color: var(--color-primary-light); }
+.comm-hero__feedback {
+  margin-top: var(--space-3);
+  color: var(--color-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+}
 .comm-hero__visual { display: flex; justify-content: center; }
 .comm-hero__image { width: 100%; max-width: 400px; border-radius: var(--radius-xl); }
 
@@ -20,6 +39,14 @@
 .comm-main__sort:hover:not(.comm-main__sort--active) { color: var(--color-text); }
 .comm-main__filter-btn { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); color: var(--color-text-secondary); padding: 8px 14px; border-radius: var(--radius-md); border: 1px solid var(--color-border); }
 .comm-main__posts { display: flex; flex-direction: column; gap: var(--space-4); margin-bottom: var(--space-6); }
+.comm-main__empty {
+  padding: var(--space-8);
+  text-align: center;
+  color: var(--color-text-secondary);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+}
 .comm-main__load-more { width: 100%; justify-content: center; }
 
 .comm-sidebar { display: flex; flex-direction: column; gap: var(--space-6); position: sticky; top: calc(var(--navbar-height) + 24px); }
@@ -55,4 +82,5 @@
 @media (max-width: 640px) {
   .comm-hero__heading { font-size: var(--text-3xl); }
   .comm-hero__input-wrap { flex-direction: column; width: 100%; }
+  .comm-hero__select { width: 100%; }
 }

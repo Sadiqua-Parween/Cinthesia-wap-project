@@ -1,7 +1,7 @@
 import './SkinInsights.css'
 
-function SkinInsights() {
-  const insights = [
+function SkinInsights({ insights }) {
+  const defaultInsights = [
     {
       icon: '💧',
       title: 'You might be dehydrated',
@@ -18,12 +18,13 @@ function SkinInsights() {
       text: 'Daily SPF is essential to prevent pigmentation and damage.',
     },
   ]
+  const visibleInsights = insights?.length ? insights : defaultInsights
 
   return (
     <div className="skin-insights">
       <h3 className="skin-insights__title">Your Skin Insights</h3>
       <div className="skin-insights__list">
-        {insights.map((insight, i) => (
+        {visibleInsights.map((insight, i) => (
           <div key={i} className="skin-insights__item">
             <span className="skin-insights__icon">{insight.icon}</span>
             <div>

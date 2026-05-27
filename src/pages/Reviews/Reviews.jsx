@@ -3,16 +3,75 @@ import ReviewCard from '../../components/ReviewCard/ReviewCard'
 import StarRating from '../../components/StarRating/StarRating'
 import './Reviews.css'
 
+const defaultReviews = [
+  { id: 1, category: 'Before & After', author: 'Ishita Sharma', initial: 'I', time: '2 days ago', verified: true, title: 'My acne journey 💜', description: 'These products changed my skin completely. Super grateful!', rating: 4.9, images: ['/images/glow-serum.png', '/images/hero-products.png'], products: ['Niacinamide 10% Serum', 'Radiance Moisturizer'], likes: 23, comments: 5 },
+  { id: 2, category: 'Routine Results', author: 'Riya Mehta', initial: 'R', time: '3 days ago', verified: true, title: 'Finally saw results!', description: 'Consistency + right products = magic ✨', rating: 4.8, images: ['/images/blog-routine.png', '/images/blog-gentle.png'], products: ['Vitamin C Serum', 'Sunscreen SPF 50+'], likes: 18, comments: 3 },
+  { id: 3, category: 'Product Reviews', author: 'Pooja Patel', initial: 'P', time: '1 week ago', verified: true, title: 'My holy grail routine ✨', description: 'Simple, effective and my skin loves it!', rating: 4.8, images: ['/images/skincare-routine.png'], products: ['Cleanser', 'Serum', 'Moisturizer'], likes: 21, comments: 6 },
+  { id: 4, category: 'Product Reviews', author: 'Ananya Verma', initial: 'A', time: '1 week ago', verified: false, title: 'Best sunscreen ever!', description: 'No white cast, super light and perfect for daily use.', rating: 4.7, images: ['/images/blog-selfcare.png'], products: ['Sunscreen SPF 50+'], likes: 17, comments: 4 },
+]
+
 function Reviews() {
   const [activeTab, setActiveTab] = useState('All Reviews')
+  const [sortBy, setSortBy] = useState('Most Recent')
+  const [reviews, setReviews] = useState(defaultReviews)
+  const [storyTitle, setStoryTitle] = useState('')
+  const [storyText, setStoryText] = useState('')
+  const [storyCategory, setStoryCategory] = useState('Routine Results')
+  const [storyRating, setStoryRating] = useState('5')
+  const [storyProducts, setStoryProducts] = useState('')
+  const [feedback, setFeedback] = useState('')
   const tabs = ['All Reviews', 'Before & After', 'Product Reviews', 'Routine Results', 'Tips & Hacks']
 
-  const reviews = [
-    { author: 'Ishita Sharma', initial: 'I', time: '2 days ago', verified: true, title: 'My acne journey 💜', description: 'These products changed my skin completely. Super grateful!', rating: 4.9, images: ['/images/glow-serum.png', '/images/hero-products.png'], products: ['Niacinamide 10% Serum', 'Radiance Moisturizer'], likes: 23, comments: 5 },
-    { author: 'Riya Mehta', initial: 'R', time: '3 days ago', verified: true, title: 'Finally saw results!', description: 'Consistency + right products = magic ✨', rating: 4.8, images: ['/images/blog-routine.png', '/images/blog-gentle.png'], products: ['Vitamin C Serum', 'Sunscreen SPF 50+'], likes: 18, comments: 3 },
-    { author: 'Pooja Patel', initial: 'P', time: '1 week ago', verified: true, title: 'My holy grail routine ✨', description: 'Simple, effective and my skin loves it!', rating: 4.8, images: ['/images/skincare-routine.png'], products: ['Cleanser', 'Serum', 'Moisturizer'], likes: 21, comments: 6 },
-    { author: 'Ananya Verma', initial: 'A', time: '1 week ago', verified: false, title: 'Best sunscreen ever!', description: 'No white cast, super light and perfect for daily use.', rating: 4.7, images: ['/images/blog-selfcare.png'], products: ['Sunscreen SPF 50+'], likes: 17, comments: 4 },
-  ]
+  function scrollToForm() {
+    document.getElementById('write-review')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    const title = storyTitle.trim()
+    const description = storyText.trim()
+
+    if (!title || !description) {
+      setFeedback('Add a title and your story before posting.')
+      return
+    }
+
+    const newReview = {
+      id: Date.now(),
+      category: storyCategory,
+      author: 'You',
+      initial: 'Y',
+      time: 'Just now',
+      verified: false,
+      title,
+      description,
+      rating: Number(storyRating),
+      images: ['/images/blog-selfcare.png'],
+      products: storyProducts
+        .split(',')
+        .map((product) => product.trim())
+        .filter(Boolean),
+      likes: 0,
+      comments: 0,
+    }
+
+    setReviews((currentReviews) => [newReview, ...currentReviews])
+    setActiveTab('All Reviews')
+    setSortBy('Most Recent')
+    setStoryTitle('')
+    setStoryText('')
+    setStoryProducts('')
+    setStoryRating('5')
+    setStoryCategory('Routine Results')
+    setFeedback('Posted! Your blog will stay here until you refresh the page.')
+  }
+
+  const visibleReviews = [...reviews]
+    .filter((review) => activeTab === 'All Reviews' || review.category === activeTab)
+    .sort((a, b) => {
+      if (sortBy === 'Highest Rated') return b.rating - a.rating
+      return b.id - a.id
+    })
 
   return (
     <div className="reviews-page">
@@ -22,7 +81,7 @@ function Reviews() {
             <span className="badge">✦ REAL STORIES</span>
             <h1 className="rev-hero__heading">Real stories.<br/>Real <em>results.</em></h1>
             <p className="rev-hero__subtext">Honest reviews from our beautiful community ✨</p>
-            <button className="btn btn-primary">Share Your Story →</button>
+            <button className="btn btn-primary" onClick={scrollToForm}>Share Your Story →</button>
             <div className="rev-hero__social-proof">
               <div className="avatar-stack">
                 {['I','R','P','A'].map((a,i) => <div key={i} className="avatar avatar-sm" style={{background:`hsl(${i*60+260},55%,65%)`}}>{a}</div>)}
@@ -60,7 +119,10 @@ function Reviews() {
             </div>
             <div className="rev-tabs__controls">
               <button className="comm-main__filter-btn">Filter ⚙</button>
-              <select className="rev-tabs__sort"><option>Most Recent</option><option>Highest Rated</option></select>
+              <select className="rev-tabs__sort" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                <option>Most Recent</option>
+                <option>Highest Rated</option>
+              </select>
             </div>
           </div>
         </div>
@@ -69,19 +131,83 @@ function Reviews() {
       <section className="rev-grid section">
         <div className="container">
           <div className="rev-grid__inner">
-            {reviews.map((r,i) => <ReviewCard key={i} {...r}/>)}
+            {visibleReviews.map((review) => <ReviewCard key={review.id} {...review}/>)}
           </div>
         </div>
       </section>
 
-      <section className="rev-share">
+      <section className="rev-share" id="write-review">
         <div className="rev-share__inner container">
           <div>
-            <h3>Share your glow story ✨</h3>
+            <h3>Add your blog ✨</h3>
             <p>Your experience can inspire someone today.</p>
           </div>
-          <button className="btn btn-pink">Write Your Review →</button>
+          <button className="btn btn-pink" onClick={scrollToForm}>Write Your Review →</button>
         </div>
+
+        <form className="rev-form container" onSubmit={handleSubmit}>
+          <div className="rev-form__row">
+            <div className="rev-form__field">
+              <label htmlFor="story-title">Title</label>
+              <input
+                id="story-title"
+                type="text"
+                placeholder="Give your blog a title"
+                value={storyTitle}
+                onChange={(e) => {
+                  setStoryTitle(e.target.value)
+                  setFeedback('')
+                }}
+              />
+            </div>
+            <div className="rev-form__field">
+              <label htmlFor="story-category">Category</label>
+              <select id="story-category" value={storyCategory} onChange={(e) => setStoryCategory(e.target.value)}>
+                {tabs.filter((tab) => tab !== 'All Reviews').map((tab) => (
+                  <option key={tab} value={tab}>{tab}</option>
+                ))}
+              </select>
+            </div>
+            <div className="rev-form__field">
+              <label htmlFor="story-rating">Rating</label>
+              <select id="story-rating" value={storyRating} onChange={(e) => setStoryRating(e.target.value)}>
+                <option value="5">5.0</option>
+                <option value="4.5">4.5</option>
+                <option value="4">4.0</option>
+                <option value="3.5">3.5</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="rev-form__field">
+            <label htmlFor="story-text">Your blog</label>
+            <textarea
+              id="story-text"
+              placeholder="What changed, what helped, or what did you learn?"
+              value={storyText}
+              onChange={(e) => {
+                setStoryText(e.target.value)
+                setFeedback('')
+              }}
+              rows="4"
+            />
+          </div>
+
+          <div className="rev-form__bottom">
+            <div className="rev-form__field">
+              <label htmlFor="story-products">Products used</label>
+              <input
+                id="story-products"
+                type="text"
+                placeholder="Example: Niacinamide Serum, Sunscreen"
+                value={storyProducts}
+                onChange={(e) => setStoryProducts(e.target.value)}
+              />
+            </div>
+            <button className="btn btn-primary" type="submit">Add My Blog <span>→</span></button>
+          </div>
+          {feedback && <p className="rev-form__feedback">{feedback}</p>}
+        </form>
       </section>
 
       <section className="rev-stats section-sm">

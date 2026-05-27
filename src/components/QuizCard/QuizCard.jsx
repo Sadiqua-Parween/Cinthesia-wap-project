@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './QuizCard.css'
 
 function QuizCard() {
+  const navigate = useNavigate()
   const [selectedMood, setSelectedMood] = useState(null)
 
   const moods = [
@@ -35,7 +37,10 @@ function QuizCard() {
         Your routine is<br />
         <strong>2 minutes away</strong> <span className="quiz-card__sparkle">✦</span>
       </p>
-      <button className="quiz-card__cta btn btn-primary">
+      <button
+        className="quiz-card__cta btn btn-primary"
+        onClick={() => navigate('/quiz', { state: { mood: selectedMood } })}
+      >
         Continue to Skin Quiz <span>→</span>
       </button>
     </div>

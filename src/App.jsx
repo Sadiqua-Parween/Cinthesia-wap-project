@@ -7,6 +7,9 @@ import Recommendation from './pages/Recommendation/Recommendation'
 import Community from './pages/Community/Community'
 import Reviews from './pages/Reviews/Reviews'
 import Auth from './pages/Auth/Auth'
+import Quiz from './pages/Quiz/Quiz'
+import About from './pages/About/About'
+import Discover from './pages/Discover/Discover'
 import './App.css'
 
 function ScrollToTop() {
@@ -28,6 +31,9 @@ function App() {
       <main className={isAuthPage ? '' : 'main-content'}>
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/discover" element={<Discover />} />
+          <Route path="/quiz" element={<Quiz />} />
           <Route path="/routine" element={<Recommendation />} />
           <Route path="/community" element={<Community />} />
           <Route path="/reviews" element={<Reviews />} />

@@ -1,0 +1,232 @@
+.discover-page {
+  background: var(--color-white);
+}
+
+.discover-hero {
+  background: linear-gradient(135deg, #F5F0FF 0%, #FEFCFA 52%, #FDF2F8 100%);
+  padding: var(--space-16) 0;
+}
+
+.discover-hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 470px);
+  gap: var(--space-12);
+  align-items: center;
+}
+
+.discover-hero__heading {
+  max-width: 760px;
+  font-size: var(--text-5xl);
+  margin: var(--space-5) 0;
+}
+
+.discover-hero__text {
+  max-width: 600px;
+  color: var(--color-text-secondary);
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-8);
+}
+
+.discover-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.discover-hero__gallery {
+  min-height: 460px;
+  position: relative;
+}
+
+.discover-hero__image {
+  position: absolute;
+  object-fit: cover;
+  box-shadow: var(--shadow-xl);
+}
+
+.discover-hero__image--main {
+  width: 78%;
+  right: 0;
+  top: 0;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-2xl);
+}
+
+.discover-hero__image--small {
+  width: 48%;
+  left: 0;
+  bottom: 0;
+  aspect-ratio: 1 / 1;
+  border: 10px solid var(--color-white);
+  border-radius: var(--radius-xl);
+}
+
+.discover-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+
+.discover-categories {
+  background: var(--color-white);
+}
+
+.discover-categories__grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-4);
+}
+
+.discover-category {
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  text-align: left;
+  padding: var(--space-5);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  transition: all var(--transition-base);
+}
+
+.discover-category:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary-light);
+  background: var(--color-primary-bg);
+  box-shadow: var(--shadow-md);
+}
+
+.discover-category__icon {
+  font-size: var(--text-3xl);
+}
+
+.discover-category strong {
+  font-size: var(--text-base);
+}
+
+.discover-category small {
+  color: var(--color-text-secondary);
+}
+
+.discover-products {
+  background: var(--color-bg);
+}
+
+.discover-products__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-6);
+}
+
+.discover-brands__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-5);
+}
+
+.discover-brand {
+  display: grid;
+  grid-template-columns: 48px 1fr 36px;
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-5);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow-card);
+}
+
+.discover-brand > span {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  color: var(--color-white);
+  font-weight: var(--font-bold);
+}
+
+.discover-brand h3 {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  margin-bottom: 2px;
+}
+
+.discover-brand p {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+
+.discover-brand button {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
+  font-weight: var(--font-bold);
+}
+
+.discover-cta {
+  background: var(--color-text);
+  color: var(--color-white);
+  padding: var(--space-10) 0;
+}
+
+.discover-cta__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.discover-cta h2 {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-2);
+}
+
+.discover-cta p {
+  color: rgba(255, 255, 255, 0.74);
+}
+
+@media (max-width: 1000px) {
+  .discover-categories__grid,
+  .discover-products__grid,
+  .discover-brands__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .discover-hero__inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .discover-hero {
+    padding: var(--space-10) 0;
+  }
+
+  .discover-hero__heading {
+    font-size: var(--text-4xl);
+  }
+
+  .discover-hero__gallery {
+    min-height: 360px;
+  }
+
+  .discover-section-header,
+  .discover-cta__inner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .discover-categories__grid,
+  .discover-products__grid,
+  .discover-brands__grid {
+    grid-template-columns: 1fr;
+  }
+}

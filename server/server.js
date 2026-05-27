@@ -23,7 +23,7 @@ function readUsers() {
     }
     const data = fs.readFileSync(USERS_FILE, 'utf-8');
     return JSON.parse(data);
-  } catch (error) {
+  } catch {
     return [];
   }
 }

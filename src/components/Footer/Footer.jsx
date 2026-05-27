@@ -30,9 +30,9 @@ function Footer() {
           <div className="footer__col">
             <h4 className="footer__heading">Explore</h4>
             <ul className="footer__list">
-              <li><Link to="/">About Us</Link></li>
-              <li><Link to="/">Discover Brands</Link></li>
-              <li><Link to="/">Skin Quiz</Link></li>
+              <li><Link to="/about">About Us</Link></li>
+              <li><Link to="/discover">Discover Brands</Link></li>
+              <li><Link to="/quiz">Skin Quiz</Link></li>
               <li><Link to="/routine">Routine Builder</Link></li>
             </ul>
           </div>
